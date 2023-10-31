@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Express App</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    button {
+      margin: 10px;
+      padding: 15px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+
+    #SDModels {
+      background-color: #3498db;
+    }
+
+    #img2img {
+      background-color: #2ecc71;
+    }
+
+    #txt2img {
+      background-color: #f1c40f;
+    }
+
+    #cnFiles {
+      background-color: #e74c3c;
+    }
+	
+	#refresh {
+		background-color: blueviolet;
+	}
+
+    .response-area {
+      margin-top: 20px;
+      background-color: white;
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <button id="SDModels" onclick="window.location.href='/SDModels'">SD Models</button>
+
+  <form action="/txt2img" id="form" class="form" method="POST">
+	<button id="img2img" onclick="window.location.href='/img2img'">Image2Img</button>
+	<button type="submit" id="txt2img">Text2Img</button>
+	
+	<label for="prompt">Prompts:</label>
+	<input type="text" id="prompt" name="pos_prompt">
+
+	<label for="negprompt">Negative Prompts:</label>
+	<input type="text" id="negprompt" name="neg_prompt">
+  </form>
+  
+  <button id="cnFiles" onclick="window.location.href='/cnFiles'">cnFiles</button>
+
+  <div class="response-area">
+    <p>
+		<% if (locals.model_names){ %>
+			Models: 
+			<% model_names.forEach((model) => { %>
+				<%=model.model_name%>
+				<p></p>
+			<% }) %>
+		<% } else if (locals.cnList){ %>
+			Control Nets: 
+			<% cnList.forEach((cn) => { %>
+				<%=cn%>
+				<p></p>
+			<% }) %>
+		<% } else if (locals.content.images) { %>
+			result:
+			<img src="data:image/png;base64,<%= content.images[0] %>">
+		<% } else { %>
+      		<%=content%>
+		<% } %>
+    </p>
+  </div>
+
+  <button id="refresh" onclick="window.location.href='/'">Refresh</button>
+</body>
+
+</html>
